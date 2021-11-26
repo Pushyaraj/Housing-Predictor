@@ -15,5 +15,7 @@ if __name__ == '__main__':
     std_prices=np.std(prices)
     sb.pairplot(data,size=2.5)
     #plt.hist(data)
-    plt.show()
+    #plt.show()
+    cm = np.corrcoef(data.values.T)
+    print(c)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
