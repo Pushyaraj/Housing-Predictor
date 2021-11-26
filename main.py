@@ -13,9 +13,11 @@ if __name__ == '__main__':
     median_price=np.median(prices)
     mean_price=np.mean(prices)
     std_prices=np.std(prices)
-    sb.pairplot(data,size=2.5)
+    #sb.pairplot(data,size=2.5)
     #plt.hist(data)
-    #plt.show()
-    cm = np.corrcoef(data.values.T)
+
+    cm = np.corrcoef(data.T)
     print(cm)
+    sb.heatmap(cm)
+    plt.show()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
