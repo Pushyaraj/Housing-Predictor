@@ -17,5 +17,5 @@ if __name__ == '__main__':
     #plt.hist(data)
     #plt.show()
     cm = np.corrcoef(data.values.T)
-    print(c)
+    print(cm)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
