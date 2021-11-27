@@ -18,7 +18,7 @@ if __name__ == '__main__':
     std_prices=np.std(prices)
     #sb.pairplot(df,size=1)
     #plt.hist(data)
-    sb.regplot(x='median_income',y='median_house_value',data=df,scatter_kws={'alpha':0.05})
+    sb.histplot(df)
     #cm = np.corrcoef(data.T)
     #print(df)
     #print(type(data))
