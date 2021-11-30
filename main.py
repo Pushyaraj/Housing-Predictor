@@ -45,6 +45,7 @@ if __name__ == '__main__':
     df_outlier=remove_outlier(df,"total_rooms")
     print(data.shape)
     print(df.shape)
+
     #plt.hist(data)
     #cm = np.corrcoef(data.T)
     #print(df)
