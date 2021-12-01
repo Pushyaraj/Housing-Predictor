@@ -12,17 +12,19 @@ def remove_outlier(df, column):
     Q1=df[column].quantile(0.25)
     Q3=df[column].quantile(0.75)
     IQR=Q3-Q1
-    lower_limit=Q1-1.6*IQR
-    upper_limit=Q3+1.6*IQR
-    #print("IQR= {}, out of range bounds are: {},{}".format(IQR,lower_limit,upper_limit))
-    #rdf=df[df['total_rooms']<lower_limit|df['total_rooms']>upper_limit]
-    lower=np.where(df[column]<=lower_limit)
-    upper=np.where(df[column]>=upper_limit)
-    df.drop(lower[0], inplace=True)
-    df.drop(upper[0], inplace=True)
+    lower_limit=Q1-1.5*IQR
+    upper_limit=Q3+1.5*IQR
 
+    df_outliers=df[~((df[column]<lower_limit)|(df[column]>upper_limit))]
+    #lower=np.where(df[column]<=lower_limit)
+    #upper=np.where(df[column]>=upper_limit)
+    #df.drop(lower[0], inplace=True)
+    #df.drop(upper[0], inplace=True)
+    #print("IQR= {}, out of range bounds are: {},{}".format(IQR,lower_limit,upper_limit))
     #removed_outlier=df.drop(rdf)
-    return 0
+    #print("Outliers out of total = {} are \n {}".
+          #format(data[column].size, len(df[column])))
+    return df_outliers
 
 
 if __name__ == '__main__':
@@ -40,37 +42,76 @@ if __name__ == '__main__':
     #sb.pairplot(df,size=1,plot_kws={'line_kws':{'color':'red'},'scatter_kws':{'alpha':0.1}},kind="reg")
     #sb.pairplot(df,hue='ocean_proximity')
 
-    #correlation heatmap
-    #correlation_housing=df.corr()
-    #sb.heatmap(correlation_housing,annot=True)
+    #checking outliers
 
-    #Removing outlier
-    df_outlier=remove_outlier(df, "median_income")
+    """
+    sb.boxplot(df['median_income'])
+    plt.show()
+    sb.boxplot(df['total_rooms'])
+    plt.show()
+    sb.boxplot(df['total_bedrooms'])
+    plt.show()
+    sb.boxplot(df['households'])
+    plt.show()
+    sb.boxplot(df['population'])
+    plt.show()
+    """
+
+
+    #Removing outliers
+    df=remove_outlier(df, "median_income")
+    df=remove_outlier(df, "total_rooms")
+    df=remove_outlier(df, "total_bedrooms")
+    df=remove_outlier(df, "households")
+    df=remove_outlier(df, "population")
+
     #print(data.shape)
     #print(df.shape)
     #data.boxplot(column='total_rooms')
 
+    # Checking if outliers are removed
+    """
+    sb.boxplot(df['median_income'])
+    plt.show()
+    sb.boxplot(df['total_rooms'])
+    plt.show()
+    sb.boxplot(df['total_bedrooms'])
+    plt.show()
+    sb.boxplot(df['households'])
+    plt.show()
+    sb.boxplot(df['population'])
+    plt.show()
+    """
+    #Succesfull
+
+    #Removing null values
     # print(df.isnull().sum())
     # print(df)
     df.dropna(inplace=True)
     # print(df)
-    
-    label_encoder= preprocessing.LabelEncoder()
-    df['ocean_proximity'] = label_encoder.fit_transform(df['ocean_proximity'])
+
+    #label encoding
+    #label_encoder= preprocessing.LabelEncoder()
+    #df['ocean_proximity'] = label_encoder.fit_transform(df['ocean_proximity'])
     #print(df['ocean_proximity'].value_counts())
 
+    #one hot code encoding
+    df=pd.get_dummies(df,columns=['ocean_proximity'])
+    print(df)
 
+    # correlation heatmap
+    """
+    correlation_housing=df.corr()
+    sb.heatmap(correlation_housing,annot=True)
+    plt.show()
+    """
 
     y = df['median_house_value']
     x = df['median_income']
 
     #sb.pairplot(df,x_vars=['median_income'], y_vars=['median_house_value'],kind='reg',
                 #plot_kws={'scatter_kws':{'alpha':0.2},'line_kws':{'color':'black'}})
-    #train_x=x[:80]
-    #train_y=y[:80]
-    #test_x=x[80:]
-    #test_y=y[80:]
-    train_x,train_y,test_x,test_y=train_test_split(x,y,test_size=0.2)  # Splitting the data
+    train_x, train_y, test_x, test_y = train_test_split(x, y, test_size=0.2, random_state=1)  # Splitting the data
 
     print("X_train shape {} and size {}".format(train_x.shape, train_x.size))
     print("X_test shape {} and size {}".format(test_x.shape, test_x.size))
@@ -80,8 +121,9 @@ if __name__ == '__main__':
     #plt.scatter(test_x,test_y)
     sb.histplot(data['median_income'])
     plt.show()
+    #sb.boxplot(df['total_rooms'])
     sb.histplot(df['median_income'])
-
+    plt.show()
 
     #df.boxplot(column='population')
     #plt.hist(data)
@@ -89,7 +131,7 @@ if __name__ == '__main__':
     #print(df)
     #print(type(data))
     #sb.heatmap(cm)
-    #print(df.describe())
+    print(df.describe())
     interactive(False)
     plt.show()
 
