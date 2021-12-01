@@ -106,6 +106,9 @@ if __name__ == '__main__':
     plt.show()
     """
 
+    #Data that is cleaned and used for machine learning model
+    df.to_csv('cleaned_housing_csv')
+
     y = df['median_house_value']
     x = df['median_income']
 
