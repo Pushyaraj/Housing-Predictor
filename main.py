@@ -107,7 +107,7 @@ if __name__ == '__main__':
     """
 
     #Data that is cleaned and used for machine learning model
-    df.to_csv('cleaned_housing_csv')
+    df.to_csv('clean_california_housing.csv')
 
     y = df['median_house_value']
     x = df['median_income']
