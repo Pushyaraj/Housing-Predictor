@@ -5,6 +5,10 @@ import seaborn as sb
 import sklearn as sk
 from sklearn.model_selection import train_test_split
 from matplotlib import interactive
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 from sklearn import preprocessing
 
 def remove_outlier(df, column):
@@ -119,6 +123,29 @@ if __name__ == '__main__':
     print("test_y shape {} and size {}".format(test_y.shape, test_y.size))
     """
 
+
+    scaler = StandardScaler().fit(train_x)
+    train_x = scaler.transform(train_x)
+    test_x = scaler.transform(test_x)
+
+
+    lr = LinearRegression()
+    lr.fit(train_x,train_y)
+    #y_pred=lr.predict(standardized_X_test)
+    #print("ahss {}   {}".format(y_pred,train_y))
+    #r2=r2_score(y_true=train_y,y_pred=y_pred)
+    print("Intercept is "+str(lr.intercept_))
+    y_pred=lr.predict(test_x)
+    print(len(y_pred))
+    print(len(test_y))
+
+    testing=pd.DataFrame({'Actual':test_y, 'Predicted':y_pred})
+    sb.jointplot(x='Actual', y='Predicted', data=testing, kind='reg',color='r'
+                 ,joint_kws={'line_kws':{'color':'black'}} )
+
+    print(np.sqrt(mean_squared_error(test_y, y_pred)))
+    print(np.sqrt(mean_squared_error(train_y, lr.predict(train_x))))
+
     #plt.scatter(test_x,test_y)
     sb.histplot(data['median_income'])
     plt.show()
@@ -132,7 +159,7 @@ if __name__ == '__main__':
     #print(df)
     #print(type(data))
     #sb.heatmap(cm)
-    print(df.describe())
+    #print(df.describe())
     interactive(False)
     plt.show()
 
